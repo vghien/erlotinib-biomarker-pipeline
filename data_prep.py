@@ -1,19 +1,3 @@
-"""
-One-time data preparation script.
-
-Reads the raw GDSC files in `data/raw/` and produces a small, GitHub-friendly
-processed CSV at `data/processed/erlotinib_dataset.csv` containing:
-
-    - One row per cell line that has both an Erlotinib IC50 and an expression profile.
-    - Metadata columns: COSMIC_ID, cell_line_name, ln_IC50.
-    - Expression columns: the top ~1,500 most variable genes plus a curated set
-      of canonical EGFR-pathway genes (so the notebook can show biological validation
-      even if those genes aren't in the top-variance set).
-
-Run once after downloading the raw files:
-
-    python data_prep.py
-"""
 from pathlib import Path
 
 import pandas as pd
