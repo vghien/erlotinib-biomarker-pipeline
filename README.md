@@ -17,25 +17,6 @@ This project tackles that problem on real cell line data:
 - Train a **regression model** to predict log-IC50 from the selected features.
 - Inspect the top biomarkers and check whether they recover **known EGFR pathway biology** (EGFR, KRAS, BRAF, MET, ERBB2 — the canonical drivers of Erlotinib response and resistance).
 
----
-
-## Repository Layout
-
-```
-.
-├── README.md
-├── data_prep.py                       # one-time preparation: raw GDSC files → processed CSV
-├── drug_resistance_pipeline.ipynb     # the analysis notebook (loads the processed CSV)
-├── .gitignore
-└── data/
-    ├── raw/                           # raw GDSC downloads (gitignored, see "Data Sources" below)
-    │   ├── GDSC2_fitted_dose_response.csv
-    │   └── sanger_expression.txt.gz
-    └── processed/
-        └── erlotinib_dataset.csv      # the ~8 MB committed dataset the notebook reads
-```
-
-The notebook is fully self-contained at run time — it only reads `data/processed/erlotinib_dataset.csv`, which is committed to the repository. The raw files (~175 MB) are not committed; they're recreated by re-downloading from the Sanger Institute (see below) if anyone wants to regenerate the processed CSV from scratch.
 
 ---
 
@@ -46,19 +27,6 @@ The notebook is fully self-contained at run time — it only reads `data/process
 | GDSC2 Fitted Dose Response | ln(IC50) values for ~1,000 cell lines × ~250 drugs (we filter to Erlotinib) | [Sanger FTP — current release](https://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC2_fitted_dose_response_24Jul22.csv) | `data/raw/GDSC2_fitted_dose_response.csv` (38 MB) |
 | GDSC RMA-normalized Expression | Basal gene expression matrix (~17,000 Ensembl genes × ~1,000 cell lines) | [Sanger FTP — release 6.0](https://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/release-6.0/sanger1018_brainarray_ensemblgene_rma.txt.gz) | `data/raw/sanger_expression.txt.gz` (135 MB) |
 
-To rebuild the processed CSV from scratch:
-
-```bash
-# 1. download the raw files into data/raw/
-mkdir -p data/raw && cd data/raw
-curl -O https://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC2_fitted_dose_response_24Jul22.csv
-mv GDSC2_fitted_dose_response_24Jul22.csv GDSC2_fitted_dose_response.csv
-curl -O https://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/release-6.0/sanger1018_brainarray_ensemblgene_rma.txt.gz
-mv sanger1018_brainarray_ensemblgene_rma.txt.gz sanger_expression.txt.gz
-
-# 2. run the prep script
-cd ../.. && python data_prep.py
-```
 
 ---
 
